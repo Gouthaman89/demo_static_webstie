@@ -1,0 +1,15 @@
+const CHUNK_PUBLIC_PATH = "server/pages/_error.js";
+const runtime = require("../chunks/ssr/[turbopack]_runtime.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_bf671b14._.js");
+runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__77a1878d._.js");
+runtime.loadChunk("server/chunks/ssr/[externals]_flowise-embed-react_4f9abe94._.js");
+runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__803bc3a9._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_next_4c51dd90._.js");
+runtime.loadChunk("server/chunks/ssr/29970_@mui_system_esm_4c07c7f6._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_@mui_material_57fdcd67._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_@popperjs_core_lib_62fd8b49._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_68124e10._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_next_a671e220._.js");
+runtime.loadChunk("server/chunks/ssr/[externals]_next_dist_shared_lib_no-fallback-error_external_d7a8835d.js");
+runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/pages.js { INNER_PAGE => \"[project]/node_modules/next/error.js [ssr] (ecmascript)\", INNER_DOCUMENT => \"[project]/src/pages/_document.jsx [ssr] (ecmascript)\", INNER_APP => \"[project]/src/pages/_app.js [ssr] (ecmascript)\" } [ssr] (ecmascript)", CHUNK_PUBLIC_PATH);
+module.exports = runtime.getOrInstantiateRuntimeModule("[project]/node_modules/next/dist/esm/build/templates/pages.js { INNER_PAGE => \"[project]/node_modules/next/error.js [ssr] (ecmascript)\", INNER_DOCUMENT => \"[project]/src/pages/_document.jsx [ssr] (ecmascript)\", INNER_APP => \"[project]/src/pages/_app.js [ssr] (ecmascript)\" } [ssr] (ecmascript)", CHUNK_PUBLIC_PATH).exports;

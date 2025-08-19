@@ -1,0 +1,10 @@
+{
+  "[project]/node_modules/flowise-embed-react/dist/index.js [client] (ecmascript, next/dynamic entry)": {
+    "id": "[project]/node_modules/flowise-embed-react/dist/index.js [client] (ecmascript, next/dynamic entry)",
+    "files": [
+      "static/chunks/node_modules_flowise-embed-react_dist_index_9acc1db5.js",
+      "static/chunks/node_modules_flowise-embed-react_dist_index_50f958b8.js",
+      "static/chunks/node_modules_flowise-embed-react_dist_index_25d52cc2.js"
+    ]
+  }
+}

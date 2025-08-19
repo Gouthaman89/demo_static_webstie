@@ -1,0 +1,21 @@
+__turbopack_load_page_chunks__("/_app", [
+  "static/chunks/node_modules_flowise-embed-react_dist_index_23e4b3f0.js",
+  "static/chunks/[root-of-the-server]__9d9348ec._.js",
+  "static/chunks/node_modules_next_dist_compiled_next-devtools_index_82a36480.js",
+  "static/chunks/node_modules_next_dist_compiled_43e01ce8._.js",
+  "static/chunks/node_modules_next_dist_shared_lib_49fd796b._.js",
+  "static/chunks/node_modules_next_dist_client_c0365516._.js",
+  "static/chunks/node_modules_next_dist_c2daf96a._.js",
+  "static/chunks/node_modules_next_0a0ec92f._.js",
+  "static/chunks/node_modules_react_1cad9b0b._.js",
+  "static/chunks/node_modules_react-dom_cjs_react-dom_development_ab7e073c.js",
+  "static/chunks/node_modules_react-dom_f14d0471._.js",
+  "static/chunks/29970_@mui_system_esm_50e29a26._.js",
+  "static/chunks/node_modules_@mui_material_04501190._.js",
+  "static/chunks/node_modules_axios_lib_9aa2336a._.js",
+  "static/chunks/node_modules_@popperjs_core_lib_525b6336._.js",
+  "static/chunks/node_modules_64f11f93._.js",
+  "static/chunks/src_styles_globals_4738091e.css",
+  "static/chunks/src_pages__app_5771e187._.js",
+  "static/chunks/src_pages__app_46b9f454._.js"
+])

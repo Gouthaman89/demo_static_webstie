@@ -1,0 +1,11 @@
+const CHUNK_PUBLIC_PATH = "server/pages/_app.js";
+const runtime = require("../chunks/ssr/[turbopack]_runtime.js");
+runtime.loadChunk("server/chunks/ssr/[externals]_flowise-embed-react_4f9abe94._.js");
+runtime.loadChunk("server/chunks/ssr/[root-of-the-server]__19e2ed7f._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_next_20d450db._.js");
+runtime.loadChunk("server/chunks/ssr/29970_@mui_system_esm_4c07c7f6._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_@mui_material_57fdcd67._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_@popperjs_core_lib_62fd8b49._.js");
+runtime.loadChunk("server/chunks/ssr/node_modules_335aa134._.js");
+runtime.getOrInstantiateRuntimeModule("[project]/src/pages/_app.js [ssr] (ecmascript)", CHUNK_PUBLIC_PATH);
+module.exports = runtime.getOrInstantiateRuntimeModule("[project]/src/pages/_app.js [ssr] (ecmascript)", CHUNK_PUBLIC_PATH).exports;
