@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { Box, Button, TextField, Typography, Paper, CircularProgress } from '@mui/material';
-import PublicIcon from '@mui/icons-material/Public'; // A better icon for ESG
+ 
 import { styled, keyframes } from '@mui/system';
 
 // Keyframes for the background gradient animation
@@ -174,7 +174,7 @@ const LoginPage = () => {
       </ShapesContainer>
 
       <StyledPaper elevation={12}>
-        <PublicIcon sx={{ fontSize: 60, mb: 2, color: '#43cea2' }} />
+        
         <Title variant="h4" gutterBottom>
           EZ Tracker
         </Title>
