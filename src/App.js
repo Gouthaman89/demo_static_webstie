@@ -1,68 +1,50 @@
-import React from 'react';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  Redirect,
-} from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import MenuBar from './components/MenuBar';
-import Page1 from './pages/Page1';
-import Page2 from './pages/Page2';
-import Page3 from './pages/Page3';
-import Page4 from './pages/Page4';
-import Page5 from './pages/Page5';
+import './styles/globals.css';
+import Layout from './components/Layout';
+import { AuthProvider, useAuth } from './components/AuthContext';
+import { GlobalProvider } from './components/GlobalContext';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
-// A wrapper for <Route> that redirects to the login
-// screen if you're not yet authenticated.
-function PrivateRoute({ children, ...rest }) {
-  const isAuthenticated = localStorage.getItem('token');
-  return (
-    <Route
-      {...rest}
-      render={({ location }) =>
-        isAuthenticated ? (
-          children
-        ) : (
-          <Redirect
-            to={{
-              pathname: '/login',
-              state: { from: location },
-            }}
-          />
-        )
+function AuthRedirect({ children }) {
+  const { token, loading } = useAuth();
+  const history = useHistory();
+
+  useEffect(() => {
+    if (!loading) {
+      if (!token && history.location.pathname !== '/login') {
+        // Redirect to login if not authenticated
+        history.push('/login');
+      } else if (token && history.location.pathname === '/') {
+        // Redirect to profile page if authenticated and on the root page
+        history.push('/profile');
       }
-    />
-  );
+    }
+  }, [token, loading, history]);
+
+  if (loading) {
+    // Use a more user-friendly loading indicator, like a spinner
+    return (
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+        Loading...
+      </div>
+    );
+  }
+
+  return children; // Render children when not loading
 }
 
-function MainApp() {
+function MyApp({ Component, pageProps }) {
+  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
+
   return (
-    <div>
-      <MenuBar />
-      <Switch>
-        <Route path="/page1" component={Page1} />
-        <Route path="/page2" component={Page2} />
-        <Route path="/page3" component={Page3} />
-        <Route path="/page4" component={Page4} />
-        <Route path="/page5" component={Page5} />
-        <Redirect from="/" to="/page1" />
-      </Switch>
-    </div>
+    <AuthProvider>
+      <GlobalProvider>
+        <AuthRedirect>
+          {getLayout(<Component {...pageProps} />)}
+        </AuthRedirect>
+      </GlobalProvider>
+    </AuthProvider>
   );
 }
 
-function App() {
-  return (
-    <Router>
-      <Switch>
-        <Route path="/login" component={LoginPage} />
-        <PrivateRoute path="/">
-          <MainApp />
-        </PrivateRoute>
-      </Switch>
-    </Router>
-  );
-}
-
-export default App;
+export default MyApp;

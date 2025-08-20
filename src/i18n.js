@@ -1,5 +1,4 @@
-import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import { initReacti18n } from 'react-i18next';
 import en from './locales/en/common.json';
 import zh from './locales/zh/common.json';
 import jp from './locales/jp/common.json';
@@ -17,8 +16,8 @@ const resources = {
   },
 };
 
-// Initialize i18next
-i18n.use(initReactI18next).init({
+// Initialize i18n
+i18n.use(initReacti18n).init({
   resources,
   lng: 'zh-TW', // Default language
   fallbackLng: 'zh-TW', // Fallback language if not found

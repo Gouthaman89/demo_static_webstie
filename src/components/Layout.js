@@ -1,35 +1,29 @@
 import React, { useState, useEffect } from 'react';
-import dynamic from 'next/dynamic'; // Import dynamic from Next.js
-import { useTranslation } from 'react-i18next';
-import AppBar from '@mui/material/AppBar';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Box from '@mui/material/Box';
-import TranslateIcon from '@mui/icons-material/Translate';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import MenuIcon from '@mui/icons-material/Menu';
-import Link from 'next/link';
-import i18n from '../i18n';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Box from '@material-ui/core/Box';
+import TranslateIcon from '@material-ui/icons/Translate';
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import MenuIcon from '@material-ui/icons/Menu';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import { useGlobalContext } from '../components/GlobalContext';
 import * as PageController from '../controllers/PageControllers';
 import Chat from "../pages/Chat";
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-
-const BubbleChat = dynamic(() => import('flowise-embed-react').then(mod => mod.BubbleChat), {
-  ssr: false, // Prevents Next.js from trying to render on the server
-});
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import i18n from '../i18n';
 
 const Layout = ({ children }) => {
-  const { t } = useTranslation();
+  const t = (key) => (i18n && typeof i18n.t === 'function' ? i18n.t(key) : key);
   const {
     token,
     logout,
@@ -204,18 +198,18 @@ const Layout = ({ children }) => {
 
   return (
     <div>
-      <AppBar position="static" sx={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
+      <AppBar position="static" style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
         <Toolbar>
           {/* Menu Icon and App Title */}
           <IconButton edge="start" color="inherit" aria-label="menu">
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ mr: 2 }}>
+          <Typography variant="h6" style={{ marginRight: 16 }}>
   EZ Tracker
 </Typography>
 
-          <Box sx={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-            <FormControl size="small" sx={{ minWidth: 150, mr: 2 }}>
+          <Box style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+            <FormControl style={{ minWidth: 150, marginRight: 16 }}>
               <Select
                 displayEmpty
                 value={safeCompanyValue}
@@ -239,7 +233,7 @@ const Layout = ({ children }) => {
               </Select>
             </FormControl>
 
-            <FormControl size="small" sx={{ minWidth: 150, mr: 2 }} disabled={!globalCompanyId}>
+            <FormControl style={{ minWidth: 150, marginRight: 16 }} disabled={!globalCompanyId}>
               <Select
                 displayEmpty
                 value={safeOrgValue}
@@ -260,7 +254,7 @@ const Layout = ({ children }) => {
             <IconButton color="inherit" onClick={handleLanguageMenuOpen}>
               <TranslateIcon />
             </IconButton>
-            <Typography variant="body1" sx={{ ml: 1 }}>
+            <Typography variant="body1" style={{ marginLeft: 8 }}>
               {currentLanguage.toUpperCase()}
             </Typography>
             <Menu
@@ -273,16 +267,16 @@ const Layout = ({ children }) => {
               <MenuItem onClick={() => handleLanguageChange('ja-JP')}>日本語 (Japanese)</MenuItem>
             </Menu>
 
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box style={{ display: 'flex', alignItems: 'center' }}>
               <IconButton edge="end" color="inherit">
                 <AccountCircle />
               </IconButton>
-              <Typography variant="body1" sx={{ ml: 1 }}>
+              <Typography variant="body1" style={{ marginLeft: 8 }}>
                 {profile?.name || 'User'}
               </Typography>
             </Box>
 
-            <Button onClick={logout} variant="outlined" color="primary" sx={{ ml: 2 }}>
+            <Button onClick={logout} variant="outlined" color="primary" style={{ marginLeft: 16 }}>
               Logout
             </Button>
           </Box>
@@ -295,21 +289,19 @@ const Layout = ({ children }) => {
         <div style={{ width: '180px', backgroundColor: '#0000000D', padding: '20px' }}>
           <List>
             {menuItems.map((item, index) => (
-              <Link key={index} href={item.path} passHref>
-                <ListItem button component="a">
-                  <ListItemText
-                    primary={t(item.label)}
-                    primaryTypographyProps={{
-                      sx: {
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        display: 'block',
-                      },
-                    }}
-                  />
-                </ListItem>
-              </Link>
+              <ListItem button component={Link} to={item.path} key={index}>
+                <ListItemText
+                  primary={t(item.label)}
+                  primaryTypographyProps={{
+                    style: {
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: 'block',
+                    },
+                  }}
+                />
+              </ListItem>
             ))}
           </List>
         </div>
@@ -322,6 +314,7 @@ const Layout = ({ children }) => {
 
    {/* Chatbot (Only loads in browser) */}
 <Chat user={profile?.name || "Guest"} />
+
     </div>
   );
 };

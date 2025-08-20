@@ -1,9 +1,14 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Box, Paper, Typography, IconButton, TextField, Tooltip } from '@mui/material';
-import SendIcon from '@mui/icons-material/Send';
-import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
-import MinimizeIcon from '@mui/icons-material/Minimize';
-import ClearAllIcon from '@mui/icons-material/ClearAll';
+import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Tooltip from '@material-ui/core/Tooltip';
+import SendIcon from '@material-ui/icons/Send';
+import ChatBubbleIcon from '@material-ui/icons/ChatBubble';
+import MinimizeIcon from '@material-ui/icons/Minimize';
+import ClearAllIcon from '@material-ui/icons/ClearAll';
 
 const Chat = ({ user }) => {
   const [open, setOpen] = useState(false); // Controls whether the chat window is open
@@ -75,11 +80,11 @@ const Chat = ({ user }) => {
   // When chat is closed, show only the chat icon
   if (!open) {
     return (
-      <Box sx={{ position: "fixed", bottom: 20, right: 20 }}>
+      <Box style={{ position: "fixed", bottom: 20, right: 20 }}>
         <Tooltip title="Open Chat">
           <IconButton 
             onClick={() => setOpen(true)}
-            sx={{ backgroundColor: "#1976d2", color: "#fff" }}>
+            style={{ backgroundColor: "#1976d2", color: "#fff" }}>
             <ChatBubbleIcon />
           </IconButton>
         </Tooltip>
@@ -89,7 +94,7 @@ const Chat = ({ user }) => {
 
   // When chat is open, show the full chat window
   return (
-    <Paper elevation={4} sx={{ 
+    <Paper elevation={4} style={{ 
       position: "fixed", 
       bottom: 20, 
       right: 20, 
@@ -97,13 +102,13 @@ const Chat = ({ user }) => {
       maxHeight: "80vh", 
       display: "flex", 
       flexDirection: "column", 
-      borderRadius: 2 
+      borderRadius: 8 
     }}>
       {/* Chat Header with Minimize and Clear Chat buttons */}
-      <Box sx={{ 
+      <Box style={{ 
         backgroundColor: "#1976d2", 
         color: "#fff", 
-        p: 1, 
+        padding: 8, 
         borderTopLeftRadius: 8, 
         borderTopRightRadius: 8, 
         display: "flex", 
@@ -113,12 +118,12 @@ const Chat = ({ user }) => {
         <Typography variant="h6">Chat Support</Typography>
         <Box>
           <Tooltip title="Clear Chat">
-            <IconButton onClick={clearChat} sx={{ color: "#fff" }}>
+            <IconButton onClick={clearChat} style={{ color: "#fff" }}>
               <ClearAllIcon fontSize="small" />
             </IconButton>
           </Tooltip>
           <Tooltip title="Minimize">
-            <IconButton onClick={minimizeChat} sx={{ color: "#fff" }}>
+            <IconButton onClick={minimizeChat} style={{ color: "#fff" }}>
               <MinimizeIcon fontSize="small" />
             </IconButton>
           </Tooltip>
@@ -126,16 +131,16 @@ const Chat = ({ user }) => {
       </Box>
 
       {/* Chat Messages */}
-      <Box sx={{ flexGrow: 1, p: 2, overflowY: "auto", backgroundColor: "#f9f9f9" }}>
+      <Box style={{ flexGrow: 1, padding: 16, overflowY: "auto", backgroundColor: "#f9f9f9" }}>
         {messages.map((msg, index) => (
-          <Box key={index} sx={{ 
+          <Box key={index} style={{ 
             display: "flex", 
             justifyContent: msg.sender === "user" ? "flex-end" : "flex-start", 
-            mb: 1 
+            marginBottom: 8 
           }}>
-            <Box sx={{ 
-              p: 1.5, 
-              borderRadius: 2, 
+            <Box style={{ 
+              padding: 12, 
+              borderRadius: 8, 
               backgroundColor: msg.sender === "user" ? "#1976d2" : "#e0e0e0", 
               color: msg.sender === "user" ? "#fff" : "#000", 
               maxWidth: "80%" 
@@ -148,7 +153,7 @@ const Chat = ({ user }) => {
       </Box>
 
       {/* Chat Input */}
-      <Box sx={{ display: "flex", p: 1, borderTop: "1px solid #ddd" }}>
+      <Box style={{ display: "flex", padding: 8, borderTop: "1px solid #ddd" }}>
         <TextField
           variant="outlined"
           placeholder="Type a message..."
@@ -156,7 +161,7 @@ const Chat = ({ user }) => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyPress={handleKeyPress}
-          sx={{ flexGrow: 1 }}
+          style={{ flexGrow: 1 }}
         />
         <IconButton color="primary" onClick={sendMessage}>
           <SendIcon />
