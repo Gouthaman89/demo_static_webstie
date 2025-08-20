@@ -1,6 +1,8 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useHistory, useLocation } from 'react-router-dom';
 import axios from 'axios';
+
+const API_BASE = process.env.REACT_APP_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
 
 const AuthContext = createContext();
 
@@ -12,7 +14,8 @@ export function AuthProvider({ children }) {
   const [profile, setProfile] = useState(null);
   const [reportId, setReportId] = useState(null);
   const [loading, setLoading] = useState(true); // To manage loading state for profile fetching
-  const router = useRouter();
+  const history = useHistory();
+  const location = useLocation();
 
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
@@ -32,16 +35,16 @@ export function AuthProvider({ children }) {
       }
     } else {
       setLoading(false);
-      if (router.pathname !== '/login') {
-        router.push('/login');
+      if (location.pathname !== '/login') {
+        history.push('/login');
       }
     }
-}, [router, profile]); // Add `profile` as a dependency
+  }, [location, profile]); // Add `profile` as a dependency, replace router with location
 
   const fetchProfile = async (token, personId) => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_BASE_URL}/profile`,
+        `${API_BASE}/profile`,
         { personid: personId },
         {
           headers: {
@@ -64,7 +67,7 @@ export function AuthProvider({ children }) {
     localStorage.setItem('token', newToken);
     localStorage.setItem('personId', newPersonId);
     fetchProfile(newToken, newPersonId);
-    router.push('/profile');
+    history.push('/profile');
   };
 
   const setGlobalReportId = (newReportId) => {
@@ -80,7 +83,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('token');
     localStorage.removeItem('personId');
     localStorage.removeItem('reportId');
-    router.push('/login');
+    history.push('/login');
   };
 
   return (
