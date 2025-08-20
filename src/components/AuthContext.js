@@ -1,22 +1,54 @@
-import { createContext, useContext, useState, useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+// src/components/AuthContext.js
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
+import { useHistory, useLocation } from 'react-router-dom';
 
-const API_BASE = process.env.REACT_APP_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE =
+  process.env.REACT_APP_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE_URL || '';
 
-const AuthContext = createContext();
+export const AuthContext = React.createContext();
 
-export const useAuth = () => useContext(AuthContext);
-
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [personId, setPersonId] = useState(null);
-  const [profile, setProfile] = useState(null);
   const [reportId, setReportId] = useState(null);
-  const [loading, setLoading] = useState(true); // To manage loading state for profile fetching
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
   const history = useHistory();
   const location = useLocation();
 
+  const logout = useCallback(() => {
+    setToken(null);
+    setPersonId(null);
+    setProfile(null);
+    setReportId(null);
+    localStorage.removeItem('token');
+    localStorage.removeItem('personId');
+    localStorage.removeItem('reportId');
+    history.push('/login');
+  }, [history]);
+
+  const fetchProfile = useCallback(
+    async (tok, pid) => {
+      try {
+        const resp = await axios.post(
+          `${API_BASE}/profile`,
+          { personid: pid },
+          { headers: { Authorization: `Bearer ${tok}` } }
+        );
+        setProfile(resp.data?.[0] ?? null);
+      } catch (err) {
+        console.error('Error fetching profile:', err);
+        logout(); // token invalid or request failed
+      } finally {
+        setLoading(false);
+      }
+    },
+    [logout]
+  );
+
+  // Initialize auth state
   useEffect(() => {
     const savedToken = localStorage.getItem('token');
     const savedPersonId = localStorage.getItem('personId');
@@ -27,11 +59,11 @@ export function AuthProvider({ children }) {
       setPersonId(savedPersonId);
       setReportId(savedReportId);
 
-      // Fetch profile only if it is not already loaded
+      // Only fetch if we don't already have a profile
       if (!profile) {
         fetchProfile(savedToken, savedPersonId);
       } else {
-        setLoading(false); // Avoid fetching if already available
+        setLoading(false);
       }
     } else {
       setLoading(false);
@@ -39,67 +71,37 @@ export function AuthProvider({ children }) {
         history.push('/login');
       }
     }
-  }, [location, profile]); // Add `profile` as a dependency, replace router with location
+    // Include fetchProfile and history to satisfy exhaustive-deps
+  }, [location, profile, fetchProfile, history]);
 
-  const fetchProfile = async (token, personId) => {
-    try {
-      const response = await axios.post(
-        `${API_BASE}/profile`,
-        { personid: personId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setProfile(response.data[0]);
-    } catch (error) {
-      console.error('Error fetching profile:', error);
-      logout(); // Logout the user if fetching the profile fails (e.g., token is invalid)
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const login = (newToken, newPersonId) => {
-    setToken(newToken);
-    setPersonId(newPersonId);
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('personId', newPersonId);
-    fetchProfile(newToken, newPersonId);
-    history.push('/profile');
-  };
-
-  const setGlobalReportId = (newReportId) => {
-    setReportId(newReportId);
-    localStorage.setItem('reportId', newReportId);
-  };
-
-  const logout = () => {
-    setToken(null);
-    setPersonId(null);
-    setProfile(null);
-    setReportId(null);
-    localStorage.removeItem('token');
-    localStorage.removeItem('personId');
-    localStorage.removeItem('reportId');
-    history.push('/login');
-  };
+  const login = useCallback(
+    (newToken, newPersonId) => {
+      setToken(newToken);
+      setPersonId(newPersonId);
+      localStorage.setItem('token', newToken);
+      localStorage.setItem('personId', newPersonId);
+      fetchProfile(newToken, newPersonId);
+      history.push('/profile');
+    },
+    [fetchProfile, history]
+  );
 
   return (
     <AuthContext.Provider
       value={{
         token,
         personId,
-        profile,
         reportId,
+        profile,
+        loading,
         login,
         logout,
-        setGlobalReportId,
-        loading,
+        setReportId,
       }}
     >
-      {!loading ? children : <div>Loading...</div>} {/* Display a loading indicator or skeleton while loading */}
+      {children}
     </AuthContext.Provider>
   );
-}
+};
+
+export const useAuth = () => React.useContext(AuthContext);
