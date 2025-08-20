@@ -1,50 +1,52 @@
-import './styles/globals.css';
+import React, { Suspense } from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import { useAuth } from './components/AuthContext';
 import Layout from './components/Layout';
-import { AuthProvider, useAuth } from './components/AuthContext';
-import { GlobalProvider } from './components/GlobalContext';
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import ProfilePage from './pages/profile';
+import UnderConstruction from './pages/UnderConstruction';
 
-function AuthRedirect({ children }) {
-  const { token, loading } = useAuth();
-  const history = useHistory();
-
-  useEffect(() => {
-    if (!loading) {
-      if (!token && history.location.pathname !== '/login') {
-        // Redirect to login if not authenticated
-        history.push('/login');
-      } else if (token && history.location.pathname === '/') {
-        // Redirect to profile page if authenticated and on the root page
-        history.push('/profile');
-      }
-    }
-  }, [token, loading, history]);
-
-  if (loading) {
-    // Use a more user-friendly loading indicator, like a spinner
-    return (
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-        Loading...
-      </div>
-    );
-  }
-
-  return children; // Render children when not loading
-}
-
-function MyApp({ Component, pageProps }) {
-  const getLayout = Component.getLayout || ((page) => <Layout>{page}</Layout>);
-
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
+function PrivateRoute({ children, ...rest }) {
+  let auth = useAuth();
   return (
-    <AuthProvider>
-      <GlobalProvider>
-        <AuthRedirect>
-          {getLayout(<Component {...pageProps} />)}
-        </AuthRedirect>
-      </GlobalProvider>
-    </AuthProvider>
+    <Route
+      {...rest}
+      render={({ location }) =>
+        auth.token ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
   );
 }
 
-export default MyApp;
+function App() {
+  return (
+    <Layout>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <PrivateRoute path="/profile">
+            <ProfilePage />
+          </PrivateRoute>
+          <Route path="*">
+            <UnderConstruction />
+          </Route>
+        </Switch>
+      </Suspense>
+    </Layout>
+  );
+}
+
+export default App;
