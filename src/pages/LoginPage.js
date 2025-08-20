@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
 // The Login API function (unchanged)
 const loginApi = async ({ userCode, password }) => {
   // ... (your existing API call logic remains the same)
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/loginweb`, {
+  const response = await fetch(`https://icx-nodejs-linux-deh2fbcaahfrgyc6.australiaeast-01.azurewebsites.net/api/api/auth/loginweb`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userCode, password }),
