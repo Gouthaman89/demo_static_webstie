@@ -1,30 +1,42 @@
-import i18n from 'i18next';
-import { initReactI18n } from 'react-i18next';
 import en from './locales/en/common.json';
 import zh from './locales/zh/common.json';
 import jp from './locales/jp/common.json';
 
-// Language resources
+// Language resources (no external libs)
 const resources = {
-  en: {
-    translation: en,
-  },
-  zh: {
-    translation: zh,
-  },
-  jp: {
-    translation: jp,
-  },
+  en: { translation: en },
+  zh: { translation: zh },
+  jp: { translation: jp },
 };
 
-// Initialize i18n
-i18n.use(initReactI18n).init({
-  resources,
-  lng: 'zh', // Default language
-  fallbackLng: 'zh', // Fallback language if not found
-  interpolation: {
-    escapeValue: false, // React already escapes values
+function normalizeLng(lng) {
+  if (!lng) return 'zh';
+  const lower = String(lng).toLowerCase();
+  if (lower.startsWith('en')) return 'en';
+  if (lower.startsWith('zh')) return 'zh';
+  if (lower.startsWith('ja') || lower.startsWith('jp')) return 'jp';
+  return 'zh'; // fallback
+}
+
+const store = {
+  lng: 'zh', // default UI language
+};
+
+const i18n = {
+  get language() {
+    return store.lng;
   },
-});
+  set language(v) {
+    store.lng = v || 'zh';
+  },
+  changeLanguage(lng) {
+    store.lng = lng || 'zh';
+    return Promise.resolve();
+  },
+  t(key) {
+    const ns = resources[normalizeLng(store.lng)]?.translation || {};
+    return ns[key] ?? key;
+  },
+};
 
 export default i18n;

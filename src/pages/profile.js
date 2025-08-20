@@ -7,7 +7,6 @@ import {
   Grid,
   Avatar,
   Container,
-  Alert,
 } from '@material-ui/core';
 import Loader from '../components/Loader/loader';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
@@ -24,7 +23,7 @@ const ProfilePage = () => {
   if (!profile) {
     return (
       <Container>
-        <Alert severity="error">{t('failedToLoadProfile')}</Alert>
+      
       </Container>
     );
   }

@@ -1,13 +1,16 @@
 import React from 'react';
-import { Box, Typography, Button, Card } from '@mui/material';
-//import { useNavigate } from 'react-router-dom';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import { useHistory } from 'react-router-dom';
 
 const UnderConstruction = () => {
-    const navigate = useNavigate();
+    const history = useHistory();
 
     return (
         <Box
-            sx={{
+            style={{
                 height: '100vh',
                 display: 'flex',
                 justifyContent: 'center',
@@ -16,17 +19,17 @@ const UnderConstruction = () => {
                 textAlign: 'center',
             }}
         >
-            <Card sx={{ p: 4, boxShadow: 3 }}>
+            <Card elevation={3} style={{ padding: 32 }}>
                 <Typography variant="h4" gutterBottom color="primary">
                     🚧 Under Construction 🚧
                 </Typography>
-                <Typography variant="body1" sx={{ mb: 3 }}>
+                <Typography variant="body1" style={{ marginBottom: 24 }}>
                     This feature is currently under development. Please check back later!
                 </Typography>
                 <Button
                     variant="contained"
                     color="secondary"
-                    onClick={() => navigate(-1)} // Navigate back to the previous page
+                    onClick={() => history.goBack()} // Navigate back to the previous page
                 >
                     Go Back
                 </Button>
