@@ -3,7 +3,7 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // Base URL from environment variables
+  baseURL: process.env.REACT_APP_API_BASE_URL, // Base URL from environment variables
   headers: {
     'Content-Type': 'application/json',
   },

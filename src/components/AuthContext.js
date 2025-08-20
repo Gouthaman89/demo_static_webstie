@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-import axios from 'axios';
-
-const API_BASE = process.env.REACT_APP_API_BASE_URL ;
+import apiClient from '../utils/apiclient';
 
 const AuthContext = createContext();
 
@@ -41,18 +39,10 @@ export function AuthProvider({ children }) {
     }
   }, [location, profile]); // Add `profile` as a dependency, replace router with location
 
-const fetchProfile = async (token, personId) => {
+  const fetchProfile = async (token, personId) => {
     try {
-      const response = await axios.post(
-        `${API_BASE}/profile`,
-        { personid: personId },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setProfile(response.data[0]);
+      const response = await apiClient.post('/profile', { personid: personId });
+      setProfile(response[0]);
     } catch (error) {
       console.error('Error fetching profile:', error);
       logout(); // Logout the user if fetching the profile fails (e.g., token is invalid)

@@ -1,23 +1,13 @@
-// VendorServicesController.js
+import apiClient from '../utils/apiclient';
+
 const VendorServicesController = {
   async getServices(orgId) {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/icx_scope3_getservice`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ orgId })
-  });
-  return await response.json();
-},
+    return apiClient.post('/icx_scope3_getservice', { orgId });
+  },
 
   async addService(service) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/icx_scope3_add_service`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(service)
-      });
-
-      const result = await response.json();
+      const result = await apiClient.post('/icx_scope3_add_service', service);
       console.log("✅ 新增成功:", result);
       return result;
     } catch (error) {
@@ -27,13 +17,7 @@ const VendorServicesController = {
 
   async updateService(service) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/icx_scope3_update_service`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(service)
-      });
-
-      const result = await response.json();
+      const result = await apiClient.post('/icx_scope3_update_service', service);
       console.log("✅ 更新成功:", result);
       return result;
     } catch (error) {
@@ -41,16 +25,9 @@ const VendorServicesController = {
     }
   },
 
-
   async deleteService(service) {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/icx_scope3_delete_service`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(service)
-      });
-
-      const result = await response.json();
+      const result = await apiClient.post('/icx_scope3_delete_service', service);
       console.log("✅ 刪除成功:", result);
       return result;
     } catch (error) {

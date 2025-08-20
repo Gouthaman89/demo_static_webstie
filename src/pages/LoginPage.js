@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Button, TextField, Typography, Paper, CircularProgress } from '@material-ui/core';
+import apiClient from '../utils/apiclient';
 
 const useStyles = makeStyles((theme) => ({
   '@keyframes gradientAnimation': {
@@ -114,20 +115,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// The Login API function (unchanged)
-const loginApi = async ({ userCode, password }) => {
-  // ... (your existing API call logic remains the same)
-  const response = await fetch(`https://icx-nodejs-linux-deh2fbcaahfrgyc6.australiaeast-01.azurewebsites.net/api/api/auth/loginweb`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ userCode, password }),
-  });
-  if (!response.ok) throw new Error('Login failed');
-  const data = await response.json();
-  return { token: data.access_token, personId: data.personid };
-};
-
-
 const LoginPage = () => {
   const classes = useStyles();
   const { login } = useAuth();
@@ -145,7 +132,8 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
     try {
-      const { token, personId } = await loginApi({ userCode, password });
+      const response = await apiClient.post('/api/auth/loginweb', { userCode, password });
+      const { access_token: token, personid: personId } = response;
       login(token, personId);
     } catch (err) {
       setError('Login failed. Please check your credentials and try again.');

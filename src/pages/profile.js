@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useAuth } from '../components/AuthContext';
-import axios from 'axios';
 import {
   Box,
   Card,
@@ -16,53 +15,18 @@ import { useTranslation } from 'react-i18next';
 
 const ProfilePage = () => {
   const { t } = useTranslation();
-  const { token, personId } = useAuth(); // Get the token and personId from AuthContext
-  const [profile, setProfile] = useState(null); // State to store profile data
-  const [error, setError] = useState(null); // State to handle errors
+  const { profile, loading } = useAuth(); // Get profile, and loading state from AuthContext
 
-  // Fetch profile data when the component mounts
-  useEffect(() => {
-    const fetchProfile = async () => {
-      if (!personId || personId === '') {
-        setError(t('invalidPersonID'));
-        return;
-      }
-
-      try {
-        const response = await axios.post(
-          `${process.env.REACT_APP_API_BASE_URL}/profile`, // API endpoint
-          {
-            personid: personId, // Send personId in the body
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`, // Include token in headers
-            },
-          }
-        );
-        // Set the profile data from API response
-        setProfile(response.data[0]);
-      } catch (error) {
-        console.error(t('errorFetchingProfileData'), error);
-        setError(t('failedToFetchProfileData'));
-      }
-    };
-
-    if (token && personId) {
-      fetchProfile(); // Fetch profile data if token and personId are available
-    }
-  }, [token, personId, t]);
-
-  if (error) {
-    return (
-      <Container>
-        <Alert severity="error">{error}</Alert>
-      </Container>
-    );
+  if (loading) {
+    return <Loader />;
   }
 
   if (!profile) {
-    return <Loader />;
+    return (
+      <Container>
+        <Alert severity="error">{t('failedToLoadProfile')}</Alert>
+      </Container>
+    );
   }
 
   return (
