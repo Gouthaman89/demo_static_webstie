@@ -9,7 +9,7 @@ import Modal from '@material-ui/core/Modal';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import PersonDataTable from '../components/Table /personDataTable';
+import PersonDataTable from '../components/Table/personDataTable';
 import PersonDataForm from '../components/Form/Person_DataForm';
 import * as PageController from '../controllers/PageControllers';
 import i18n from '../i18n';
