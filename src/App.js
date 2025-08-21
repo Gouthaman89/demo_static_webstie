@@ -30,22 +30,35 @@ function PrivateRoute({ children, ...rest }) {
 }
 
 function App() {
+  const { loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <Layout>
-      <Suspense fallback={<div>Loading...</div>}>
-        <Switch>
-          <Route path="/login">
-            <LoginPage />
-          </Route>
-          <PrivateRoute path="/profile">
-            <ProfilePage />
-          </PrivateRoute>
-          <Route path="*">
-            <UnderConstruction />
-          </Route>
-        </Switch>
-      </Suspense>
-    </Layout>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Switch>
+        {/* Public route: login */}
+        <Route path="/login">
+          <LoginPage />
+        </Route>
+
+        {/* Private area: everything else gets the app layout */}
+        <PrivateRoute path="/">
+          <Layout>
+            <Switch>
+              <Route exact path="/profile">
+                <ProfilePage />
+              </Route>
+              <Route path="*">
+                <UnderConstruction />
+              </Route>
+            </Switch>
+          </Layout>
+        </PrivateRoute>
+      </Switch>
+    </Suspense>
   );
 }
 

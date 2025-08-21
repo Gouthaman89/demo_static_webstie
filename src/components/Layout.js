@@ -31,6 +31,11 @@ const Layout = ({ children }) => {
     personId
   } = useAuth();
 
+  // Do not render layout chrome before login
+  if (!token) {
+    return <>{children}</>;
+  }
+
   const {
     globalCompanyId,
     setGlobalCompanyId,
