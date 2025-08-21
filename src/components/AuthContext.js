@@ -15,30 +15,6 @@ export function AuthProvider({ children }) {
   const history = useHistory();
   const location = useLocation();
 
-  useEffect(() => {
-    const savedToken = localStorage.getItem('token');
-    const savedPersonId = localStorage.getItem('personId');
-    const savedReportId = localStorage.getItem('reportId');
-
-    if (savedToken && savedPersonId) {
-      setToken(savedToken);
-      setPersonId(savedPersonId);
-      setReportId(savedReportId);
-
-      // Fetch profile only if it is not already loaded
-      if (!profile) {
-        fetchProfile(savedToken, savedPersonId);
-      } else {
-        setLoading(false); // Avoid fetching if already available
-      }
-    } else {
-      setLoading(false);
-      if (location.pathname !== '/login') {
-        history.push('/login');
-      }
-    }
-  }, [location, profile, history, fetchProfile]); // Add `profile`, `history` and `fetchProfile` as dependencies, replace router with location
-
   const fetchProfile = useCallback(async (tok, pid) => {
     try {
       const response = await apiClient.post('/profile', { personid: pid });
@@ -58,6 +34,29 @@ export function AuthProvider({ children }) {
       setLoading(false);
     }
   }, [history]);
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem('token');
+    const savedPersonId = localStorage.getItem('personId');
+    const savedReportId = localStorage.getItem('reportId');
+
+    if (savedToken && savedPersonId) {
+      setToken(savedToken);
+      setPersonId(savedPersonId);
+      setReportId(savedReportId);
+
+      if (!profile) {
+        fetchProfile(savedToken, savedPersonId);
+      } else {
+        setLoading(false);
+      }
+    } else {
+      setLoading(false);
+      if (location.pathname !== '/login') {
+        history.push('/login');
+      }
+    }
+  }, [location, profile, history, fetchProfile]);
 
   const login = (newToken, newPersonId) => {
     setToken(newToken);

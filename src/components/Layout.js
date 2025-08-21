@@ -47,9 +47,9 @@ const Layout = ({ children }) => {
 
   // ---- Persist selections across refresh (per user) ----
   const isBrowser = typeof window !== 'undefined';
-  const getLS = (key) => (isBrowser ? window.localStorage.getItem(key) : null);
-  const setLS = (key, val) => { if (isBrowser) window.localStorage.setItem(key, val); };
-  const rmLS = (key) => { if (isBrowser) window.localStorage.removeItem(key); };
+  const getLS = useCallback((key) => (isBrowser ? window.localStorage.getItem(key) : null), [isBrowser]);
+  const setLS = useCallback((key, val) => { if (isBrowser) window.localStorage.setItem(key, val); }, [isBrowser]);
+  const rmLS = useCallback((key) => { if (isBrowser) window.localStorage.removeItem(key); }, [isBrowser]);
   const storagePrefix = `eztracker:${personId || 'anon'}`;
   const COMPANY_KEY = `${storagePrefix}:companyId`;
   const ORG_KEY = `${storagePrefix}:orgId`;
@@ -70,7 +70,7 @@ const Layout = ({ children }) => {
     handleLanguageMenuClose();
   };
 
-  const fetchOrganizations = async (companyId, { tryRestoreOrg = false } = {}) => {
+  const fetchOrganizations = useCallback(async (companyId, { tryRestoreOrg = false } = {}) => {
     try {
       await PageController.getData(
         `/f000110e30/organizations?personid=${personId}&companyId=${companyId}`,
@@ -91,8 +91,8 @@ const Layout = ({ children }) => {
     } catch (err) {
       console.error('Failed to fetch organizations:', err);
     }
-  };
-  const fetchCompanies = async () => {
+  }, [personId, getLS, ORG_KEY, globalOrgId, setGlobalOrgId, setOrganizationList]);
+  const fetchCompanies = useCallback(async () => {
     try {
       await PageController.getData(
         `/f000110e30/companies?personid=${personId}`,
@@ -118,22 +118,21 @@ const Layout = ({ children }) => {
     } catch (err) {
       console.error('Failed to fetch companies:', err);
     }
-  };
-  const fetchMenuItems = async () => {
-      if (!token) return;
-
-      try {
-        PageController.getData(endpoint, (data) => {
-          if (!data || data.length === 0) {
-            logout();
-            return;
-          }
-          setMenuItems(data);
-        });
-      } catch (error) {
-        console.error('Error fetching menu items:', error);
-      }
-    };
+  }, [personId, getLS, COMPANY_KEY, globalCompanyId, setGlobalCompanyId, fetchOrganizations, setCompanyList]);
+  const fetchMenuItems = useCallback(async () => {
+    if (!token) return;
+    try {
+      PageController.getData(endpoint, (data) => {
+        if (!data || data.length === 0) {
+          logout();
+          return;
+        }
+        setMenuItems(data);
+      });
+    } catch (error) {
+      console.error('Error fetching menu items:', error);
+    }
+  }, [token, endpoint, logout, setMenuItems]);
 
   // Initial load: fetch menu + companies (restores saved company/org if present)
   useEffect(() => {
