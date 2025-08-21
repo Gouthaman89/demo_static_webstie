@@ -1,23 +1,23 @@
-import { useRouter } from 'next/router';
+import { useHistory } from 'react-router-dom';
 import { useAuth } from './AuthContext';
 import { useEffect, useState } from 'react';
 
 const withAuth = (WrappedComponent) => {
   return (props) => {
     const { token } = useAuth();
-    const router = useRouter();
+    const history = useHistory();
     const [isLoading, setIsLoading] = useState(true); // State to track loading
 
     useEffect(() => {
       // Check authentication status
       if (!token) {
         // If no token, redirect to login page
-        router.push('/login');
+        history.push('/login');
       } else {
         // Token exists, allow the component to render
         setIsLoading(false);
       }
-    }, [token, router]);
+    }, [token, history]);
 
     // Display loading indicator while authentication status is being checked
     if (isLoading) {

@@ -5,6 +5,7 @@ import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/profile';
 import PersonPage from './pages/person';
+import AssetUploadPage from './pages/AssetUploadPage';
 import UnderConstruction from './pages/UnderConstruction';
 
 // A wrapper for <Route> that redirects to the login
@@ -54,6 +55,9 @@ function App() {
               </Route>
               <Route exact path="/person">
                 <PersonPage />
+              </Route>
+              <Route exact path="/AssetUploadPage">
+                <AssetUploadPage />
               </Route>
               <Route path="*">
                 <UnderConstruction />
