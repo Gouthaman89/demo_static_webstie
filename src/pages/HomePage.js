@@ -1,19 +1,19 @@
 import React, { useEffect } from 'react'; // Import useEffect
 import { useAuth } from '../components/AuthContext';
-import { useRouter } from 'next/router';
-import { useTranslation } from 'react-i18next';
+import { useHistory } from 'react-router-dom';
+import i18n from '../i18n';
 
 export default function HomePage() {
   const { token } = useAuth();
-  const router = useRouter();
-  const { t } = useTranslation();
+  const history = useHistory();
+  const t = (key) => (i18n && typeof i18n.t === 'function' ? i18n.t(key) : key);
 
   useEffect(() => {
     // If the user is not authenticated, redirect to the login page
     if (!token) {
-      router.push('/login');
+      history.push('/login');
     }
-  }, [token, router]);
+  }, [token, history]);
 
   // Only render the home page if the user is authenticated
   if (!token) {

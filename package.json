@@ -9,10 +9,8 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^1.7.7",
-    "i18next": "^25.3.6",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-i18next": "^15.6.1",
     "react-router-dom": "5.3.4",
     "react-scripts": "5.0.1"
   },
@@ -36,5 +34,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "typescript": "^4.9.5"
   }
 }

@@ -1,19 +1,19 @@
-import React from 'react';
-import {
-    TableContainer,
-    Table,
-    TableHead,
-    TableRow,
-    TableCell,
-    TableBody,
-    RadioGroup,
-    FormControlLabel,
-    Radio,
-} from '@mui/material';
-import { useTranslation } from 'react-i18next';
 import * as PageController from '../../controllers/PageControllers';
+import React from 'react';
+import TableContainer from '@material-ui/core/TableContainer';
+import Table from '@material-ui/core/Table';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import TableCell from '@material-ui/core/TableCell';
+import TableBody from '@material-ui/core/TableBody';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Radio from '@material-ui/core/Radio';
+import i18n from '../../i18n';
+
+const t = (key) => (i18n && typeof i18n.t === 'function' ? i18n.t(key) : key);
+
 const YearActions = ({ row, isEditing, onEdit, onSave, onCancel }) => {
-    const { t } = useTranslation();
     return (
         <>
             <button onClick={() => (isEditing ? onSave(row) : onEdit(row))}>
@@ -34,18 +34,17 @@ export const YearTable = ({
     fetchYearData,
     setSnackbar,
 }) => {
-    const { t } = useTranslation();
 
     return (
         <TableContainer>
             <Table>
                 <TableHead>
                     <TableRow>
-                        <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>{t('year')}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>{t('bookkeeperCompanyName')}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>{t('bookkeeperName')}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>{t('calendarType')}</TableCell>
-                        <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>{t('actions')}</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>{t('year')}</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>{t('bookkeeperCompanyName')}</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>{t('bookkeeperName')}</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>{t('calendarType')}</TableCell>
+                        <TableCell style={{ fontWeight: 'bold' }}>{t('actions')}</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

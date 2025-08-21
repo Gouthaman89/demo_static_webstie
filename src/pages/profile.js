@@ -10,10 +10,10 @@ import {
 } from '@material-ui/core';
 import Loader from '../components/Loader/loader';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 const ProfilePage = () => {
-  const { t } = useTranslation();
+  const t = (key) => (i18n && typeof i18n.t === 'function' ? i18n.t(key) : key);
   const { profile, loading } = useAuth(); // Get profile, and loading state from AuthContext
 
   if (loading) {
