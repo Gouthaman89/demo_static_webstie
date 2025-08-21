@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
@@ -44,7 +44,6 @@ const Layout = ({ children }) => {
   const [languageAnchor, setLanguageAnchor] = useState(null);
   const [currentLanguage, setCurrentLanguage] = useState(i18n.language);
   const [menuItems, setMenuItems] = useState([]); // Initialize menuItems as an empty array
-  const [rows, setRows] = useState([]);
 
   // ---- Persist selections across refresh (per user) ----
   const isBrowser = typeof window !== 'undefined';
@@ -129,7 +128,6 @@ const Layout = ({ children }) => {
             logout();
             return;
           }
-          setRows(data);
           setMenuItems(data);
         });
       } catch (error) {
@@ -145,19 +143,19 @@ const Layout = ({ children }) => {
       await fetchCompanies(); // handles restore + org fetch internally
     };
     initialize();
-  }, [token, personId]);
+  }, [token, personId, fetchMenuItems, fetchCompanies]);
 
   // Persist selections when they change
   useEffect(() => {
     if (globalCompanyId) {
       setLS(COMPANY_KEY, globalCompanyId);
     }
-  }, [globalCompanyId]);
+  }, [globalCompanyId, COMPANY_KEY, setLS]);
   useEffect(() => {
     if (globalOrgId) {
       setLS(ORG_KEY, globalOrgId);
     }
-  }, [globalOrgId]);
+  }, [globalOrgId, ORG_KEY, setLS]);
   
   // If the company list changes and current selection is invalid, fix it
   useEffect(() => {
@@ -173,7 +171,7 @@ const Layout = ({ children }) => {
         }
       }
     }
-  }, [companyList]);
+  }, [companyList, globalCompanyId, COMPANY_KEY, getLS, setGlobalCompanyId, fetchOrganizations]);
   
   // If the org list changes and current selection is invalid, fix it
   useEffect(() => {
@@ -188,7 +186,7 @@ const Layout = ({ children }) => {
         }
       }
     }
-  }, [organizationList, globalCompanyId]);
+  }, [organizationList, globalCompanyId, globalOrgId, ORG_KEY, getLS, setGlobalOrgId]);
 
   
 

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback  } from 'react';
 import { Box, Typography, TextField, IconButton, Button, Paper } from '@mui/material';
 import { getData, updateData } from '../controllers/PageControllers';
 import { useGlobalContext } from './GlobalContext';

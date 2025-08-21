@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback  } from 'react';
 import { Modal, Box, Typography, TextField, Button } from '@mui/material';
 
 const VendorUpdateModal = ({ open, onClose, onConfirm, initialData }) => {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import apiClient from '../utils/apiclient';
 
@@ -37,19 +37,27 @@ export function AuthProvider({ children }) {
         history.push('/login');
       }
     }
-  }, [location, profile]); // Add `profile` as a dependency, replace router with location
+  }, [location, profile, history, fetchProfile]); // Add `profile`, `history` and `fetchProfile` as dependencies, replace router with location
 
-  const fetchProfile = async (token, personId) => {
+  const fetchProfile = useCallback(async (tok, pid) => {
     try {
-      const response = await apiClient.post('/profile', { personid: personId });
+      const response = await apiClient.post('/profile', { personid: pid });
       setProfile(response[0]);
     } catch (error) {
       console.error('Error fetching profile:', error);
-      logout(); // Logout the user if fetching the profile fails (e.g., token is invalid)
+      // Clear auth and redirect without calling logout to avoid hook deps loop
+      setToken(null);
+      setPersonId(null);
+      setProfile(null);
+      setReportId(null);
+      localStorage.removeItem('token');
+      localStorage.removeItem('personId');
+      localStorage.removeItem('reportId');
+      history.push('/login');
     } finally {
       setLoading(false);
     }
-  };
+  }, [history]);
 
   const login = (newToken, newPersonId) => {
     setToken(newToken);
