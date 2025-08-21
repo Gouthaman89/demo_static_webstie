@@ -1,11 +1,16 @@
 // src/components/Form/Person_DataForm.js
 
 import React from 'react';
-import { Box, Button, TextField, Checkbox, FormControlLabel, MenuItem } from '@mui/material';
+import Box from '@material-ui/core/Box';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Checkbox from '@material-ui/core/Checkbox';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 
 const PersonDataForm = ({ fields, values, onChange, onSubmit, personId }) => {
   return (
-    <Box component="form" onSubmit={onSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box component="form" onSubmit={onSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {fields.map((field) => (
         <div key={field.name}>
           {field.type === 'checkbox' ? (
@@ -19,7 +24,7 @@ const PersonDataForm = ({ fields, values, onChange, onSubmit, personId }) => {
                       target: { name: field.name, value: e.target.checked },
                     })
                   }
-                  sx={{ color: 'primary.main' }}
+                  color="primary"
                 />
               }
               label={field.label}

@@ -4,6 +4,7 @@ import { useAuth } from './components/AuthContext';
 import Layout from './components/Layout';
 import LoginPage from './pages/LoginPage';
 import ProfilePage from './pages/profile';
+import PersonPage from './pages/person';
 import UnderConstruction from './pages/UnderConstruction';
 
 // A wrapper for <Route> that redirects to the login
@@ -50,6 +51,9 @@ function App() {
             <Switch>
               <Route exact path="/profile">
                 <ProfilePage />
+              </Route>
+              <Route exact path="/person">
+                <PersonPage />
               </Route>
               <Route path="*">
                 <UnderConstruction />
