@@ -31,11 +31,6 @@ const Layout = ({ children }) => {
     personId
   } = useAuth();
 
-  // Do not render layout chrome before login
-  if (!token) {
-    return <>{children}</>;
-  }
-
   const {
     globalCompanyId,
     setGlobalCompanyId,
@@ -200,123 +195,129 @@ const Layout = ({ children }) => {
 
   return (
     <div>
-      <AppBar position="static" style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
-        <Toolbar>
-          {/* Menu Icon and App Title */}
-          <IconButton edge="start" color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" style={{ marginRight: 16 }}>
-  EZ Tracker1
-</Typography>
-
-          <Box style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
-            <FormControl style={{ minWidth: 150, marginRight: 16 }}>
-              <Select
-                displayEmpty
-                value={safeCompanyValue}
-                onChange={(e) => {
-                  const nextCompany = e.target.value;
-                  setGlobalCompanyId(nextCompany);
-                  setLS(COMPANY_KEY, nextCompany);
-                  // Reset org selection (and its LS) because company changed
-                  setGlobalOrgId('');
-                  rmLS(ORG_KEY);
-                  setOrganizationList([]);
-                  fetchOrganizations(nextCompany, { tryRestoreOrg: true });
-                }}
-              >
-                <MenuItem value=""><em>{t('Select Company')}</em></MenuItem>
-                {(companyList || []).map((comp) => (
-                  <MenuItem key={comp.companyid} value={comp.companyid}>
-                    {comp.companyname}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <FormControl style={{ minWidth: 150, marginRight: 16 }} disabled={!globalCompanyId}>
-              <Select
-                displayEmpty
-                value={safeOrgValue}
-                onChange={(e) => {
-                  setGlobalOrgId(e.target.value);
-                  setLS(ORG_KEY, e.target.value);
-                }}
-              >
-                <MenuItem value=""><em>{t('Select Organization')}</em></MenuItem>
-                {(organizationList || []).map((org) => (
-                  <MenuItem key={org.organizationid} value={org.organizationid}>
-                    {org.organization}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-
-            <IconButton color="inherit" onClick={handleLanguageMenuOpen}>
-              <TranslateIcon />
-            </IconButton>
-            <Typography variant="body1" style={{ marginLeft: 8 }}>
-              {currentLanguage.toUpperCase()}
-            </Typography>
-            <Menu
-              anchorEl={languageAnchor}
-              open={Boolean(languageAnchor)}
-              onClose={handleLanguageMenuClose}
-            >
-              <MenuItem onClick={() => handleLanguageChange('zh-TW')}>中文 (Chinese)</MenuItem>
-              <MenuItem onClick={() => handleLanguageChange('en-US')}>English</MenuItem>
-              <MenuItem onClick={() => handleLanguageChange('ja-JP')}>日本語 (Japanese)</MenuItem>
-            </Menu>
-
-            <Box style={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton edge="end" color="inherit">
-                <AccountCircle />
+      {token ? (
+        <>
+          <AppBar position="static" style={{ backgroundColor: '#FFFFFF', color: '#000000' }}>
+            <Toolbar>
+              {/* Menu Icon and App Title */}
+              <IconButton edge="start" color="inherit" aria-label="menu">
+                <MenuIcon />
               </IconButton>
-              <Typography variant="body1" style={{ marginLeft: 8 }}>
-                {profile?.name || 'User'}
+              <Typography variant="h6" style={{ marginRight: 16 }}>
+                EZ Tracker1
               </Typography>
-            </Box>
 
-            <Button onClick={logout} variant="outlined" color="primary" style={{ marginLeft: 16 }}>
-              Logout
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
+              <Box style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
+                <FormControl style={{ minWidth: 150, marginRight: 16 }}>
+                  <Select
+                    displayEmpty
+                    value={safeCompanyValue}
+                    onChange={(e) => {
+                      const nextCompany = e.target.value;
+                      setGlobalCompanyId(nextCompany);
+                      setLS(COMPANY_KEY, nextCompany);
+                      // Reset org selection (and its LS) because company changed
+                      setGlobalOrgId('');
+                      rmLS(ORG_KEY);
+                      setOrganizationList([]);
+                      fetchOrganizations(nextCompany, { tryRestoreOrg: true });
+                    }}
+                  >
+                    <MenuItem value=""><em>{t('Select Company')}</em></MenuItem>
+                    {(companyList || []).map((comp) => (
+                      <MenuItem key={comp.companyid} value={comp.companyid}>
+                        {comp.companyname}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-      {/* Main Layout */}
-      <div style={{ display: 'flex', minHeight: '100vh' }}>
-        {/* Sidebar */}
-        <div style={{ width: '180px', backgroundColor: '#0000000D', padding: '20px' }}>
-          <List>
-            {menuItems.map((item, index) => (
-              <ListItem button component={Link} to={item.path} key={index}>
-                <ListItemText
-                  primary={t(item.label)}
-                  primaryTypographyProps={{
-                    style: {
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      display: 'block',
-                    },
-                  }}
-                />
-              </ListItem>
-            ))}
-          </List>
-        </div>
+                <FormControl style={{ minWidth: 150, marginRight: 16 }} disabled={!globalCompanyId}>
+                  <Select
+                    displayEmpty
+                    value={safeOrgValue}
+                    onChange={(e) => {
+                      setGlobalOrgId(e.target.value);
+                      setLS(ORG_KEY, e.target.value);
+                    }}
+                  >
+                    <MenuItem value=""><em>{t('Select Organization')}</em></MenuItem>
+                    {(organizationList || []).map((org) => (
+                      <MenuItem key={org.organizationid} value={org.organizationid}>
+                        {org.organization}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
 
-        {/* Content Area */}
-        <div style={{ flexGrow: 1, padding: '20px' }}>
-          {children}
-        </div>
-      </div>
+                <IconButton color="inherit" onClick={handleLanguageMenuOpen}>
+                  <TranslateIcon />
+                </IconButton>
+                <Typography variant="body1" style={{ marginLeft: 8 }}>
+                  {currentLanguage.toUpperCase()}
+                </Typography>
+                <Menu
+                  anchorEl={languageAnchor}
+                  open={Boolean(languageAnchor)}
+                  onClose={handleLanguageMenuClose}
+                >
+                  <MenuItem onClick={() => handleLanguageChange('zh-TW')}>中文 (Chinese)</MenuItem>
+                  <MenuItem onClick={() => handleLanguageChange('en-US')}>English</MenuItem>
+                  <MenuItem onClick={() => handleLanguageChange('ja-JP')}>日本語 (Japanese)</MenuItem>
+                </Menu>
 
-   {/* Chatbot (Only loads in browser) */}
-<Chat user={profile?.name || "Guest"} />
+                <Box style={{ display: 'flex', alignItems: 'center' }}>
+                  <IconButton edge="end" color="inherit">
+                    <AccountCircle />
+                  </IconButton>
+                  <Typography variant="body1" style={{ marginLeft: 8 }}>
+                    {profile?.name || 'User'}
+                  </Typography>
+                </Box>
 
+                <Button onClick={logout} variant="outlined" color="primary" style={{ marginLeft: 16 }}>
+                  Logout
+                </Button>
+              </Box>
+            </Toolbar>
+          </AppBar>
+
+          {/* Main Layout */}
+          <div style={{ display: 'flex', minHeight: '100vh' }}>
+            {/* Sidebar */}
+            <div style={{ width: '180px', backgroundColor: '#0000000D', padding: '20px' }}>
+              <List>
+                {menuItems.map((item, index) => (
+                  <ListItem button component={Link} to={item.path} key={index}>
+                    <ListItemText
+                      primary={t(item.label)}
+                      primaryTypographyProps={{
+                        style: {
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          display: 'block',
+                        },
+                      }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+
+            {/* Content Area */}
+            <div style={{ flexGrow: 1, padding: '20px' }}>
+              {children}
+            </div>
+          </div>
+
+          {/* Chatbot (Only loads in browser) */}
+          <Chat user={profile?.name || 'Guest'} />
+        </>
+      ) : (
+        // Unauthenticated: render children only (e.g., Login page)
+        <>{children}</>
+      )}
     </div>
   );
 };
