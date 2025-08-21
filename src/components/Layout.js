@@ -202,7 +202,7 @@ const Layout = ({ children }) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" style={{ marginRight: 16 }}>
-  EZ Tracker
+  EZ Tracker1
 </Typography>
 
           <Box style={{ display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
